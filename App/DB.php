@@ -6,13 +6,10 @@ class DB {
 
     public static $db = null;
 
-    public static function test() {
-        echo "hello world";
-    }
+    public static function init($callback=null) {
 
-    public static function init() {
         if(self::$db == null) {
-            self::$db = mysqli_connect(
+            self::$db = @mysqli_connect(
                 $_ENV['DB_HOST'],
                 $_ENV['DB_USER'],
                 $_ENV['DB_PASS'],
@@ -20,13 +17,18 @@ class DB {
             );
     
             if(\mysqli_connect_errno()) {
-                if($_ENV['DEBUG_MODE']) {
-                    die('MYSQL ERROR: '.\mysqli_connect_error());
-                } else {
-                    die('MYSQL ERROR!');
+                if(is_null($callback)) {
+                    if($_ENV['DEBUG_MODE']) {
+                        die('MYSQL ERROR: '.\mysqli_connect_error());
+                    } else {
+                        die('MYSQL ERROR!');
+                    }
+                } elseif(is_callable($callback)) {
+                    $callback(mysqli_connect_errno(), mysqli_connect_error());
                 }
             }
         }
+    
     }
 
     public static function query($sql, $values) {

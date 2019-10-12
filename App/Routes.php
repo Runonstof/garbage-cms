@@ -3,6 +3,9 @@ namespace App;
 
 use App\Route;
 
+/**
+ * Route handler, something based on Laravel I wanted to try to make myself
+ */
 class Routes {
     public static $routes = [];
     public static $fallbackRoute = null; //When URL doesnt match any route it uses this fallback route
@@ -68,7 +71,7 @@ class Routes {
             $vars = [];
             if($route->match($url, $vars)) {
                 $found=true;
-                $route->exec($vars);
+                echo $route->exec($vars);
                 break;
             }
         }

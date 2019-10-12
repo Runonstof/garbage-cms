@@ -27,6 +27,7 @@ $dotenv->load();
 // We use the composer package 'jenssegers/blade'
 //=====================================================
 
+use App\DB;
 use Jenssegers\Blade\Blade;
 $blades = new Blade('views', 'cache');
 
@@ -49,4 +50,15 @@ use App\Routes;
 
 require_once './../routes.php';
 
+/*
+DB::init(function(){
+    echo 'TODO: Start install process';
+
+
+    exit;
+});
+*/
+//Execute incoming URL
 Routes::exec($URL);
+
+
