@@ -28,9 +28,7 @@ $dotenv->load();
 //=====================================================
 
 use Jenssegers\Blade\Blade;
-
-
-$blade = new Blade('views', 'cache');
+$blades = new Blade('views', 'cache');
 
 
 //=====================================================

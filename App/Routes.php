@@ -5,6 +5,7 @@ use App\Route;
 
 class Routes {
     public static $routes = [];
+    public static $fallbackRoute = null;
 
 
 
@@ -24,12 +25,24 @@ class Routes {
         return self::match(['POST'], $url, $controllerMethod);
     }
 
+    public static function fallback($controllerMethod) {
+        self::$fallbackRoute = new Route(['POST', 'GET'],'', $controllerMethod);
+    }
+
     public static function exec($url) {
-        
+        $found = false;
         foreach(self::$routes as $route) {
             $vars = [];
             if($route->match($url, $vars)) {
+                $found=true;
                 $route->exec($vars);
+                break;
+            }
+        }
+
+        if(!$found) {
+            if(!is_null(self::$fallbackRoute)) {
+                self::$fallbackRoute->exec();
             }
         }
     }

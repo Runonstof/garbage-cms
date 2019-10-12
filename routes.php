@@ -2,4 +2,9 @@
 use App\Routes;
 
 
-Routes::get('/article/{name}/{user}/{id?}/', 'HomepageController@index')->name('artical.single');
+Routes::get('/', 'HomepageController@index')->name('artical.single');
+
+
+Routes::fallback(function(){
+    return blade('not-found')->render();
+});

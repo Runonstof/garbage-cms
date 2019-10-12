@@ -1,6 +1,7 @@
 {
     "require": {
         "vlucas/phpdotenv": "^3.6",
-        "tightenco/collect": "^6.2"
+        "tightenco/collect": "^6.2",
+        "jenssegers/blade": "^1.2"
     }
 }

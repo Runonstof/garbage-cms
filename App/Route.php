@@ -31,7 +31,7 @@ class Route {
         $rgx = preg_replace(self::$attr_rgx, '([\S]+?)',$rgx);
         $rgx = preg_replace(self::$optional_attr_rgx, '(?:/([\S]+?))?',$rgx);
         $rgx = preg_replace('/\//', '\/', $rgx);
-        return '/'.$rgx.'$/';
+        return '/^'.$rgx.'$/';
     }
 
     public function urlArgumentNames() {
@@ -56,21 +56,30 @@ class Route {
         foreach($names as $i=>$name) {
             $vars[$name] = $m[$i+1]??null;
         }
+
         
-        return $result !== false;
+        return $result != 0 && $result !== false;
     }
 
     public function exec($args=[]) {
-        $caSplitted = explode('@', $this->controllerAction);
 
-        
-        $controllerName = 'App\Controllers\\'.$caSplitted[0];
+        $action = null;
+        if(is_string($this->controllerAction)) {
+            $caSplitted = explode('@', $this->controllerAction);
+    
+            
+            $controllerName = 'App\Controllers\\'.$caSplitted[0];
+    
+    
+            $method = $caSplitted[1];
+    
+            $controller = new $controllerName;
+            $action = [$controller, $method];
+        } elseif(is_callable($this->controllerAction)) {
+            $action = $this->controllerAction;
+        }
 
-
-        $method = $caSplitted[1];
-
-        $controller = new $controllerName;
-        call_user_func_array([$controller, $method], $args);
+        echo \call_user_func_array($action, $args)??'';
         
 
     }

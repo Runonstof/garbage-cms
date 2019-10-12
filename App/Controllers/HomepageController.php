@@ -4,6 +4,6 @@ namespace App\Controllers;
 
 class HomepageController {
     public function index() {
-        echo "Welcome";
+        return blade('homepage')->render();
     }
 }
