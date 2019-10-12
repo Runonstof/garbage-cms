@@ -1,0 +1,8 @@
+$primary: green;
+.koek {
+    color: white;
+
+    &.cheese {
+        color: $primary;
+    }
+}
