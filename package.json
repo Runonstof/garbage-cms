@@ -1,19 +1,23 @@
 {
   "name": "garbage-cms",
   "version": "1.0.0",
-  "description": "A submission for the Garbage Collectors discord server contest.",
+  "description": "Submission for Garbage Collectors contest",
   "main": "resources/js/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "garbarge-cms"
+    "url": "git+https://github.com/Runonstof/garbage-cms.git"
   },
   "keywords": [
     "Garbage",
     "CMS"
   ],
-  "author": "Runonstof, JayScotto, dogcatmouse, carryirving",
-  "license": "ISC"
+  "author": "Runostof, JayScotto, dogcatmouse, carryirving",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Runonstof/garbage-cms/issues"
+  },
+  "homepage": "https://github.com/Runonstof/garbage-cms#readme"
 }
