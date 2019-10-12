@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>Garbage CMS</title>
+        <link rel="stylesheet" href="<?php echo e(mix('css/main.css')); ?>">
     </head>
     <body>
         <?php echo $__env->yieldContent('content'); ?>

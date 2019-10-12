@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>Garbage CMS</title>
+        <link rel="stylesheet" href="{{ mix('css/main.css') }}">
     </head>
     <body>
         @yield('content')
