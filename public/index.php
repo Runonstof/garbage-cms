@@ -33,4 +33,15 @@ $dotenv->load();
 
 $URL = $_GET['p']??'';
 
-require_files('App/*');
+require_files('./../App/*');
+
+
+//=====================================================
+//  Import our routes
+//
+//=====================================================
+
+use App\Routes;
+require_once './../routes.php';
+
+Routes::exec($URL);
