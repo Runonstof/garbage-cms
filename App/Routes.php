@@ -7,7 +7,7 @@ class Routes {
     public static $routes = [];
     public static $fallbackRoute = null;
 
-
+    
 
     public static function match($methods, $url, $controllerMethod) {
         $newRoute = new Route($methods, $url, $controllerMethod);
