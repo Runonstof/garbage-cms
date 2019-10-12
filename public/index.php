@@ -31,6 +31,6 @@ $dotenv->load();
 //But first we are gonna import all our PHP
 //=====================================================
 
+$URL = $_GET['p']??'';
 
-echo "test";
 require_files('App/*');
