@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("var Vue = \"\";\r\n\n\n//# sourceURL=webpack:///./resources/js/app.js?");
+eval("//=========================\r\n//Import from here new scripts/modules for Garbage CMS\r\n//This is where all the JS starts\r\n//=========================\n\n//# sourceURL=webpack:///./resources/js/app.js?");
 
 /***/ }),
 
