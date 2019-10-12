@@ -1,0 +1,19 @@
+{
+  "name": "garbage-cms",
+  "version": "1.0.0",
+  "description": "A submission for the Garbage Collectors discord server contest.",
+  "main": "resources/js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "garbarge-cms"
+  },
+  "keywords": [
+    "Garbage",
+    "CMS"
+  ],
+  "author": "Runonstof, JayScotto, dogcatmouse, carryirving",
+  "license": "ISC"
+}
