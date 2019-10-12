@@ -2,4 +2,4 @@
 use App\Routes;
 
 
-Routes::get('', 'HomepageController@index');
+Routes::get('/article/{name}/{user}/{id?}/', 'HomepageController@index')->name('artical.single');
