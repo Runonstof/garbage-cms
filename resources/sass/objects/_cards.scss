@@ -1,0 +1,24 @@
+.card {
+    border-radius: 5px;
+    border-color: grey;
+    .title {
+        padding: 10px 0;
+        border-bottom: grey;
+        background-color: lighten(grey, 15%);
+    }
+    .content {
+        padding: 5px 10px;
+    }
+
+    @each $color, $colorVal in $colors {
+        $border-color: darken($colorVal, 20%);
+
+        &-#{$color} {
+            border-color: $border-color;
+            .title {
+                border-bottom: $border-color;
+                background-color: lighten($colorVal, 15%);
+            }
+        }
+    }
+}

@@ -31,6 +31,16 @@ class DB {
     
     }
 
+    public static function exists() {
+        $exists = true;
+
+        self::init(function() use(&$exists) {
+            $exists = false;
+        });
+
+        return $exists;
+    }
+
     public static function query($sql, $values) {
         self::init();
 

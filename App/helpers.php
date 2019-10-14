@@ -1,6 +1,6 @@
 <?php
-use App\Routes;
 use Jenssegers\Blade\Blade;
+use App\Route;
 
 if(!function_exists('blade')) {
     function blade($blade, $data=[]) {
@@ -10,9 +10,24 @@ if(!function_exists('blade')) {
     }
 }
 
+if(!function_exists('getRoute')) {
+    function getRoute($name) {
+        return collect(Route::$routes)->firstWhere('name', $name);
+    }
+}
+
 if(!function_exists('route')) {
-    function route($name) {
-        return Routes::getRoutes()->firstWhere('name', $name);
+    function route($name, $vars) {
+        $route = getRoute($name);
+        $argNames = $route->urlArgumentNames();
+        
+        $hasAllArgs = true;
+        foreach($argNames as $argName) {
+            if(array_search($argName, array_keys($vars)) === false) {
+                $hasAllArgs = false;
+                
+            }
+        }
     }
 }
 

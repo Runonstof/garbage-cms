@@ -1,7 +1,8 @@
 <?php
 
 //=====================================================
-// THIS IS WHERE THE APPLICATION STARTS
+// THIS IS WHERE GARBAGE CMS's CODE STARTS
+// I wrote this while bein high af so go easy
 //=====================================================
 
 require "./../vendor/autoload.php";
@@ -25,6 +26,9 @@ $dotenv->load();
 // ever, its for import html files so you dont have
 // to write HTML twice! (just takes a google hehe)
 // We use the composer package 'jenssegers/blade'
+//
+// This is the blade templating engine, which is also
+// present in laravel framework
 //=====================================================
 
 use App\DB;
@@ -34,11 +38,21 @@ $blades = new Blade('views', 'cache');
 
 //=====================================================
 //But first we are gonna import all our PHP
+//Inside the App directory
 //=====================================================
 
-$URL = $_GET['p']??'';
+$URL = trim($_GET['p']??'','/');
 
 require_files('./../App/');
+
+
+
+use App\Route;
+
+//======================================================
+//
+//
+//======================================================
 
 
 //=====================================================
@@ -46,19 +60,18 @@ require_files('./../App/');
 //
 //=====================================================
 
-use App\Routes;
 
 require_once './../routes.php';
 
-/*
-DB::init(function(){
-    echo 'TODO: Start install process';
+//var_dump(collect(Route::$routes)->firstWhere('name','install'));
 
+//Route::handle($URL);
 
-    exit;
-});
-*/
 //Execute incoming URL
-Routes::exec($URL);
-
+if(!DB::exists()) {
+    if(!route('install')->match($URL)) {
+        header('Location: '.url().'install');
+    }
+}
+Route::handle($URL);
 

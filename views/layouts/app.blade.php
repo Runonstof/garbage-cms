@@ -4,7 +4,9 @@
         <link rel="stylesheet" href="{{ mix('css/main.css') }}">
     </head>
     <body>
-        @yield('content')
+        <div id="app">
+            @yield('content')
+        </div>
         <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>

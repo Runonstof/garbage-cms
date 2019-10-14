@@ -1,19 +1,30 @@
 <?php
-use App\Routes;
+
+use App\Model;
+use App\Models\Page;
+use App\Route;
 
 /*
 =======================================
 Here we define the urls for Garbage CMS
 This is something based on Laravel that
-I wanted to create myself.
+I wanted to try to create myself.
 
 - Runonstof
 =======================================
 */
 
-Routes::get('/', 'HomepageController@index')->name('home');
+Route::get('/', 'HomepageController@index')->name('home');
+
+Route::get('/install', 'InstallController@index')->name('install');
 
 
-Routes::fallback(function(){
+Route::namePrefix('admin.')::urlPrefix('admin')::group(function(){
+    Route::get('/', 'AdminController@index')->name('index');
+    Route::get('/pages', 'AdminController@pages')->name('pages');
+});
+
+
+Route::fallback(function(){
     return blade('not-found')->render();
 });

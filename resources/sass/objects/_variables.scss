@@ -1,0 +1,15 @@
+$color-default: #838383;
+$color-primary: #4c98ee;
+$color-secondary: darken($color-primary, 10%);
+
+$color-success: #75f14f;
+$color-warning: #da7828;
+$color-danger: #f52e2e;
+
+$colors: (
+    'default': #838383,
+    'primary': #4c98ee,
+    'success': #75f14f,
+    'warning': #da7828,
+    'danger': #f52e2e
+);

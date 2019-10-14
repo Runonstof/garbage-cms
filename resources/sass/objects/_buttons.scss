@@ -1,0 +1,13 @@
+.btn {
+    border-radius: 5px;
+
+    @each $color, $colorVal in $colors {
+        &-#{$color} {
+            background-color: $colorVal;
+
+            &:hover {
+                background-color: darken($colorVal, 10%);
+            }
+        }
+    }
+}

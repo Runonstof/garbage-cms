@@ -2,16 +2,22 @@
 
 namespace App;
 
-use App\Controllers;
 
 /**
  * Route class for handling with a single route
  */
 class Route {
+    public static $routes = [];
+    public static $namePrefix = [];
+    public static $urlPrefix = [];
+
+    public static $fallbackRoute = null;
+
     public $url = '';
-    public $methods = '';
+    private $methods = '';
     public $name = '';
-    public $controllerAction = '';
+    private $controllerAction = '';
+    private $middleware = [];
     public static $attr_rgx = '/{(\w+)}/'; //Regex to match argument definitions in url
     public static $optional_attr_rgx = '/(?:\/)?{(\w+)\?}/'; //Regex to match optional argument definitions in url
 
@@ -23,9 +29,121 @@ class Route {
      * @param String|Callable $controllerAction
      */
     public function __construct($methods, $url, $controllerAction) {
-        $this->url = trim($url,'/');
+        $this->url = trim(implode('',self::$urlPrefix).$url,'/');
         $this->methods = $methods;
         $this->controllerAction = $controllerAction;
+
+        self::$routes[] = $this;
+    }
+
+    /**
+     * Adds a route that accepts multiple request methods
+     *
+     * @param Array $methods
+     * @param String $url
+     * @param String|Callable $controllerMethod
+     * @return App\Route
+     */
+    public static function create(Array $methods, String $url, $controllerMethod) {
+        $newRoute = new Route($methods, $url, $controllerMethod);
+
+        self::$routes[] = $newRoute;
+
+        return $newRoute;
+    }
+
+    /**
+     * Adds a route that accepts only requests via the GET method
+     *
+     * @param String $url
+     * @param String|Callable $controllerMethod
+     * @return App\Route
+     */
+    public static function get($url, $controllerMethod) {
+        return self::create(['GET'], $url, $controllerMethod);
+    }
+
+    /**
+     * Adds a route that accepts only requests via the POST method
+     *
+     * @param String $url
+     * @param String|Callable $controllerMethod
+     * @return App\Route
+     */
+    public static function post($url, $controllerMethod) {
+        return self::create(['POST'], $url, $controllerMethod);
+    }
+
+    /**
+     * Creates fallback route if none is found
+     *
+     * @param String $controllerMethod
+     * @return App\Route
+     */
+    public static function fallback($controllerMethod) {
+        return self::$fallbackRoute = new Route([],'',$controllerMethod);
+    }
+
+    /**
+     * Tries to execute matching route with given url
+     *
+     * @param String $url
+     * @return Boolean $found
+     */
+    public static function handle($url) {
+        $found = false;
+        foreach(self::$routes as $route) {
+            $vars = [];
+            if($route->match($url, $vars)) {
+                $found=true;
+                echo $route->exec($vars);
+                break;
+            }
+        }
+
+        if(!$found) {
+            if(!is_null(self::$fallbackRoute)) {
+                
+                echo self::$fallbackRoute->exec();
+            }
+        }
+
+        return $found;
+    }
+
+    /**
+     * Sets global name prefix for using before group call
+     *
+     * @param String $name
+     * @return App\Route
+     */
+    public static function namePrefix($name) {
+        self::$namePrefix[] = $name;
+        return self::class;
+    }
+
+    /**
+     * Sets global url prefix for using before group call
+     *
+     * @param String $url
+     * @return App\Route
+     */
+    public static function urlPrefix($url) {
+        self::$urlPrefix[] = $url;
+        return self::class;
+    }
+    
+    /**
+     * Creates a route group
+     *
+     * @param Callable $callback
+     * @return App\Route
+     */
+    public static function group($callback) {
+        $callback();
+        array_pop(self::$namePrefix);
+        array_pop(self::$urlPrefix);
+        return self::class;
     }
 
     /**
@@ -35,7 +153,18 @@ class Route {
      * @return App\Route
      */
     public function name($name) {
-        $this->name = $name;
+        $this->name = implode('', self::$namePrefix).$name;
+        return $this;
+    }
+
+    /**
+     * Sets the route url
+     *
+     * @param String $url
+     * @return App\Route
+     */
+    public function url($url) {
+        $this->url = trim(implode('',self::$urlPrefix).$url, '/');
         return $this;
     }
 
@@ -69,6 +198,12 @@ class Route {
 
         return $names[1];
         
+    }
+
+
+    public function urlArgumentIsOptional($name) {
+        $attr_rgx = '/{([\w]+)(\?)?}/';
+        //TODO: ROUTE FUNCTION
     }
 
     /**
