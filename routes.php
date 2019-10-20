@@ -15,7 +15,7 @@ I wanted to try to create myself.
 */
 
 Route::get('/', 'HomepageController@index')->name('home');
-
+Route::get('/test', 'HomepageController@test')->name('test');
 Route::get('/install', 'InstallController@index')->name('install');
 Route::get('/test-route/{argOne}/{argTwo}/{argThree?}', function(){
     return 'hi';
