@@ -23,6 +23,7 @@ Route::get('/test-route/{argOne}/{argTwo}/{argThree?}', function(){
 
 Route::namePrefix('admin.')::urlPrefix('admin')::group(function(){
     Route::get('/', 'AdminController@index')->name('index');
+    Route::get('/test','AdminController@test')->name('test');
     Route::get('/pages', 'AdminController@pages')->name('pages');
 });
 
