@@ -17,7 +17,9 @@ I wanted to try to create myself.
 Route::get('/', 'HomepageController@index')->name('home');
 
 Route::get('/install', 'InstallController@index')->name('install');
-
+Route::get('/test-route/{argOne}/{argTwo}/{argThree?}', function(){
+    return 'hi';
+})->name('test');
 
 Route::namePrefix('admin.')::urlPrefix('admin')::group(function(){
     Route::get('/', 'AdminController@index')->name('index');

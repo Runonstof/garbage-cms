@@ -69,9 +69,10 @@ require_once './../routes.php';
 
 //Execute incoming URL
 if(!DB::exists()) {
-    if(!route('install')->match($URL)) {
-        header('Location: '.url().'install');
-    }
+    route('test');
+    // if(!route('install')->match($URL)) {
+    //     header('Location: '.url().'install');
+    // }
 }
 Route::handle($URL);
 

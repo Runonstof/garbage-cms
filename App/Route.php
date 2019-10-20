@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Collection;
+
 
 /**
  * Route class for handling with a single route
@@ -185,27 +187,38 @@ class Route {
     }
 
     /**
-     * Get an array of argument names of url in order
+     * Get an collection of argument names of url in order
      *
-     * @return Array
+     * @return Collection
      */
-    public function urlArgumentNames() {
+    public function getUrlArgNames() {
+        return $this->getUrlArgs()->keys();
+    }
+
+    /**
+     * Gets the arguments with their info
+     *
+     * @return Collection
+     */
+    public function getUrlArgs() {
+        $args = [];
 
         $names = [];
-
-        $attr_rgx = '/{([\w]+)\??}/';
-        preg_match_all($attr_rgx, $this->url, $names);
-
-        return $names[1];
-        
-    }
-
-
-    public function urlArgumentIsOptional($name) {
         $attr_rgx = '/{([\w]+)(\?)?}/';
-        //TODO: ROUTE FUNCTION
-    }
+        preg_match_all($attr_rgx, $this->url, $names);
+        
+        foreach($names[1] as $i => $name) {
+            $args[$name] = [
+                'index' => $i,
+                'required' => ($names[2][$i] == '?')
+            ];
 
+
+        }
+
+        return collect($args);
+    }
+    
     /**
      * Match the given url with the route's url
      * and puts the supplied arguments in the
@@ -221,7 +234,7 @@ class Route {
         $result = preg_match($this->urlToRegex(),$url, $m);
         
 
-        $names = $this->urlArgumentNames();
+        $names = $this->getUrlArgNames();
         
         foreach($names as $i=>$name) {
             $vars[$name] = $m[$i+1]??null;
