@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>Garbage CMS</title>
-        <link rel="stylesheet" href="<?php echo e(mix('css/main.css')); ?>">
+        <link rel="stylesheet" href="<?php echo e(mix('css/app.css')); ?>">
     </head>
     <body>
         <div id="app">

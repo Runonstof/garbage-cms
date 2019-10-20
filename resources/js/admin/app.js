@@ -1,0 +1,1 @@
+window.admin = "poepkaas";
