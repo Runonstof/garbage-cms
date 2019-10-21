@@ -9,11 +9,10 @@ class DB {
     public static function init($callback=null) {
 
         if(self::$db == null) {
-            self::$db = @mysqli_connect(
+            self::$db = mysqli_connect(
                 $_ENV['DB_HOST'],
                 $_ENV['DB_USER'],
-                $_ENV['DB_PASS'],
-                $_ENV['DB_NAME']
+                $_ENV['DB_PASS']
             );
     
             if(\mysqli_connect_errno()) {
@@ -31,17 +30,20 @@ class DB {
     
     }
 
-    public static function exists() {
-        $exists = true;
+    
 
-        self::init(function() use(&$exists) {
-            $exists = false;
-        });
-
-        return $exists;
+    public static function errno() {
+        return \mysqli_connect_errno();
     }
 
-    public static function query($sql, $values) {
+    public static function exists($dbname) {
+        return count(DB::select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{dbname}'", [
+            'dbname' => $dbname
+        ])) > 0;
+    }
+
+
+    public static function query($sql, $values=[]) {
         self::init();
 
         foreach($values as $key=>$value) { //Escape all arguments in the SQL
@@ -53,7 +55,7 @@ class DB {
         return $query;
     }
 
-    public static function select($sql, $values) {
+    public static function select($sql, $values=[]) {
         $query_result = self::query($sql, $values);
 
         $results = [];
