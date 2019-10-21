@@ -210,7 +210,7 @@ class Route {
         foreach($names[1] as $i => $name) {
             $args[$name] = [
                 'index' => $i,
-                'required' => ($names[2][$i] == '?')
+                'required' => ($names[2][$i] != '?')
             ];
 
 
@@ -269,5 +269,37 @@ class Route {
         }
 
         return \call_user_func_array($action, $args)??'';
+    }
+
+
+    public function toUrl($vars) {
+        $url = $this->url;
+        $argInfo = $this->getUrlArgs();
+        $givenArgCount = 0;
+
+        $hasAllArgs = true;
+        foreach($argInfo as $argName=>$info) {
+            if(array_search($argName, array_keys($vars)) === false && $info['required']) {
+                $hasAllArgs = false;
+                break;
+            } else {
+                $givenArgCount++;
+            }
+            $url = str_replace('{'.$argName.($info['required'] ? '' : '?').'}', $vars[$argName]??'',$url);
+            
+        }
+
+            
+        if(!$hasAllArgs) {
+            $requiredArgCount = count($this->getUrlArgs()->where('required', 'true'));
+
+            throw new \Exception("Route '{$this->name}' requires at least $requiredArgCount arguments, $givenArgCount given.");
+        } else {
+            return url().'/'.trim($url,'/');
+        }
+
+    
+
+        return null;
     }
 }

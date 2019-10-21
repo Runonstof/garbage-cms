@@ -1,12 +1,33 @@
 <?php
-
 //=====================================================
 // THIS IS WHERE GARBAGE CMS's CODE STARTS
 // I wrote this while bein high af so go easy
 //=====================================================
 
-require "./../vendor/autoload.php";
-require "./../functions.php";
+//Start the session
+if(session_status() == PHP_SESSION_NONE) { session_start(); }
+
+//Create CSRF token
+if (empty($_SESSION['token'])) {
+    $_SESSION['token'] = bin2hex(random_bytes(32));
+}
+
+function csrf_token() {
+    return $_SESSION['token'];
+}
+
+function csrf_match($token) {
+    return hash_equals(csrf_token(), $token);
+}
+
+$_SESSION['locale'] = $_SESSION['locale']??'en';
+
+$GLOBALS['lang'] = require './../lang/'.$_SESSION['locale'].'.php';
+
+require "./../vendor/autoload.php"; //import the composer packages
+require "./../functions.php"; //import our functions
+
+
 
 //=====================================================
 //.env contains sensitive data
@@ -41,7 +62,7 @@ $blades = new Blade('views', 'cache');
 //Inside the App directory
 //=====================================================
 
-$URL = trim($_GET['p']??'','/');
+
 
 require_files('./../App/');
 
@@ -51,15 +72,16 @@ use App\Route;
 
 //======================================================
 //
-//
+// Strip down the url we have and put it in $URL
 //======================================================
+$URL = trim($_GET['p']??'','/');
+
 
 
 //=====================================================
 //  Import our routes
 //
 //=====================================================
-
 
 require_once './../routes.php';
 

@@ -1,4 +1,4 @@
-vendor/
-node_modules/
-cache/
+vendor/**
+node_modules/**
+cache/**
 .env

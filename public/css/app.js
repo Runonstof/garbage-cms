@@ -81,21 +81,10 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ({
-
-/***/ "./resources/js/app.js":
-/*!*****************************!*\
-  !*** ./resources/js/app.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("//=========================\r\n//Import from here new scripts/modules for Garbage CMS\r\n//This is where all the JS starts\r\n//=========================\r\n\n\n//# sourceURL=webpack:///./resources/js/app.js?");
-
-/***/ }),
 
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
@@ -108,14 +97,14 @@ eval("// extracted by mini-css-extract-plugin\n\n//# sourceURL=webpack:///./reso
 
 /***/ }),
 
-/***/ 0:
-/*!*************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ***!
-  \*************************************************************/
+/***/ 2:
+/*!***************************************!*\
+  !*** multi ./resources/sass/app.scss ***!
+  \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! ./resources/js/app.js */\"./resources/js/app.js\");\nmodule.exports = __webpack_require__(/*! ./resources/sass/app.scss */\"./resources/sass/app.scss\");\n\n\n//# sourceURL=webpack:///multi_./resources/js/app.js_./resources/sass/app.scss?");
+eval("module.exports = __webpack_require__(/*! ./resources/sass/app.scss */\"./resources/sass/app.scss\");\n\n\n//# sourceURL=webpack:///multi_./resources/sass/app.scss?");
 
 /***/ })
 

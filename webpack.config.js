@@ -3,30 +3,22 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {
-      'app': ['./resources/js/app.js'], 
-      'app': ['./resources/sass/app.scss'],
-      'admin/app': ['./resources/js/admin/app.js'],
-      'admin/app': ['./resources/sass/admin/app.scss']
+      'app': ['./resources/js/app.js', './resources/sass/app.scss'],
+      'admin/app': ['./resources/js/admin/app.js', './resources/sass/admin/app.scss']
+      
     },
     output: {
-        path: __dirname,
-        filename: 'public/js/[name].js'
+        path: path.resolve(__dirname, ''),
+        filename: './public/js/[name].js'
     },
     module: {
         rules: [
             {
-                test: /\.s[ac]ss$/i,
+                test: /\.(?:s[ac]ss)$/i,
                 use: [
                   // Compiles Sass to CSS
                   
-                    {
-                      loader: MiniCssExtractPlugin.loader,
-                      options: {
-                        publicPath(resourcePath, context) {
-                          return path.relative(path.dirname(resourcePath), context) + '/../';
-                        }
-                      }
-                    },
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
                     'sass-loader'
                 ],
@@ -38,6 +30,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
+            path: path.resolve(__dirname),
             filename: './public/css/[name].css'
           }),
     ]

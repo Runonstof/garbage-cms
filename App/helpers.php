@@ -1,6 +1,8 @@
 <?php
 use Jenssegers\Blade\Blade;
 use App\Route;
+use App\Session;
+use Dotenv\Exception\ValidationException;
 use Psr\Log\InvalidArgumentException;
 
 if(!function_exists('blade')) {
@@ -13,38 +15,25 @@ if(!function_exists('blade')) {
 
 if(!function_exists('getRoute')) {
     function getRoute($name) {
-        return collect(Route::$routes)->firstWhere('name', $name);
+        $route = collect(Route::$routes)->firstWhere('name', $name); 
+        if(is_null($route)) {
+            throw new ValidationException("Route '$name' does not exists!");
+        }
+
+        return $route;
     }
 }
 
 if(!function_exists('route')) {
+    /**
+     * Undocumented function
+     *
+     * @param [type] $name
+     * @param array $vars
+     * @return void
+     */
     function route($name, $vars=[]) {
-        $route = getRoute($name);
-        if(!is_null($route)) {
-            $url = $route->url;
-            $argNames = $route->getUrlArgNames();
-            $argInfo = $route->getUrlArgs();
-            
-            $hasAllArgs = true;
-            foreach($argInfo as $argName=>$info) {
-                if(array_search($argName, array_keys($vars)) === false) {
-                    $hasAllArgs = false;
-                    break;
-                }
-                $url = str_replace('{'.$argName.($info['required'] ? '' : '?').'}', $vars[$argName],$url);
-            }
-        } else {
-            throw 'Route "'.$name.'" does not exists!';
-        }
-        
-
-        if(!$hasAllArgs) {
-            $requiredArgCount = $route->getUrlArgs()->where('required')->count();
-
-            //throw 'Route "'.$name.'" expects '.$requiredArgCount.' parameters, '.count(array_keys($vars)).' given.';
-        }
-
-        
+        return getRoute($name)->toUrl($vars);
     }
 }
 
@@ -64,4 +53,23 @@ if(!function_exists('url')) {
         );
       }
       
+}
+
+//this is translation function
+if(!function_exists('__')) {
+    /**
+     * Get the translation string
+     *
+     * @param string $translation_name
+     * @return void
+     */
+    function __($translation_name) {
+        return $GLOBALS['lang']['strings'][$translation_name]??'Translation not found.';
+    }
+}
+
+if(!function_exists('session')) {
+    function session() {
+        return new Session;
+    }
 }
