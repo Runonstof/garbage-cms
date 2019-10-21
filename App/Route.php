@@ -3,7 +3,8 @@
 namespace App;
 
 use Illuminate\Support\Collection;
-use App\Response;
+use App\Http\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 /**
@@ -17,7 +18,7 @@ class Route {
     public static $fallbackRoute = null;
 
     public $url = '';
-    private $methods = '';
+    private $methods = [];
     public $name = '';
     private $controllerAction = '';
     private $middleware = [];
@@ -99,7 +100,9 @@ class Route {
             $vars = [];
             if($route->match($url, $vars)) {
                 $found=true;
-                if(in_array($_SERVER['REQUEST_METHOD'], $route->methods)) {
+                if(in_array($_SERVER['REQUEST_METHOD'], $route->methods) || $route->methods == []) {
+                    //$request = Request::createFromGlobals();
+
                     $response = $route->exec($vars);
                     if($response instanceof SymfonyResponse) {
                         //if the response returned by controller is a response object
@@ -280,7 +283,7 @@ class Route {
             $action = $this->controllerAction;
         }
 
-        return \call_user_func_array($action, $args)??'';
+        return \call_user_func_array($action, [$args, Request::createFromGlobals()])??'';
     }
 
 
