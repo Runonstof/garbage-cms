@@ -3,8 +3,15 @@ use Jenssegers\Blade\Blade;
 use App\Route;
 use App\Session;
 use Dotenv\Exception\ValidationException;
-use Psr\Log\InvalidArgumentException;
+use App\Http\Response;
 
+
+if(!function_exists('response')) {
+    function response($content='',$status=200,$headers=[]) {
+        return new Response($content, $status, $headers);
+    }
+}
+ 
 if(!function_exists('blade')) {
     function blade($blade, $data=[]) {
         $blades = new Blade('./../views', './../cache');
@@ -63,8 +70,12 @@ if(!function_exists('__')) {
      * @param string $translation_name
      * @return void
      */
-    function __($translation_name) {
-        return $GLOBALS['lang']['strings'][$translation_name]??'Translation not found.';
+    function __($translation_name, $data=[]) {
+        $string = $GLOBALS['lang']['strings'][$translation_name]??'Translation not found.';
+        foreach($data as $key=>$value) {
+            $string = str_replace("{$key}", $value, $string);
+        }
+        return $string;
     }
 }
 
@@ -72,4 +83,8 @@ if(!function_exists('session')) {
     function session() {
         return new Session;
     }
+}
+
+function debug(...$txt) {
+    file_put_contents('debug.txt', file_get_contents('debug.txt').implode("\n",$txt)."\n");
 }
