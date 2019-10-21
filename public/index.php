@@ -90,11 +90,11 @@ require_once './../routes.php';
 //Route::handle($URL);
 
 //Execute incoming URL
-if(!DB::exists()) {
-    route('test');
+// if(!DB::exists()) {
+//     route('test');
     // if(!route('install')->match($URL)) {
     //     header('Location: '.url().'install');
     // }
-}
+// }
 Route::handle($URL);
 

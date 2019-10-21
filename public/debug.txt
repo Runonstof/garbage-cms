@@ -1,0 +1,61 @@
+Array
+(
+    [database] => da_2$
+)
+
+RGX: /^[\w]+$/
+VAL: da_2$
+MATCH: 0
+Array
+(
+    [database] => garbagecms
+)
+
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
