@@ -3,7 +3,8 @@
 namespace App;
 
 use Illuminate\Support\Collection;
-
+use App\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 /**
  * Route class for handling with a single route
@@ -98,7 +99,18 @@ class Route {
             $vars = [];
             if($route->match($url, $vars)) {
                 $found=true;
-                echo $route->exec($vars);
+                if(in_array($_SERVER['REQUEST_METHOD'], $route->methods)) {
+                    $response = $route->exec($vars);
+                    if($response instanceof SymfonyResponse) {
+                        //if the response returned by controller is a response object
+                        $response->send();
+                    } elseif(is_string($response)) {
+                        //if the response is a string, assume its HTML and make a response
+                        (new Response($response, Response::HTTP_OK, ['content-type' => 'text/html']))->send();
+                    }
+                } else {
+                    (new Response('Method not allowed', Response::HTTP_METHOD_NOT_ALLOWED))->send();
+                }
                 break;
             }
         }

@@ -12,5 +12,4 @@
             crossorigin="anonymous"></script>
             <script type="text/javascript" src="{{ mix('js/admin/app.js') }}"></script>
     </body>
-    <script type="text/javascript" src="{{ mix('js/admin/app.js') }}"></script>
 </html>

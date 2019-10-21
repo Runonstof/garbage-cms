@@ -21,7 +21,7 @@ Route::get('/testie-route/{argOne}/{argTwo}/{argThree?}', function(){
     return 'hi';
 })->name('testroute');
 
-Route::get('/koek', 'InstallController@koek')->name('koek');
+Route::post('/koek', 'InstallController@koek')->name('koek');
 
 Route::namePrefix('admin.')::urlPrefix('admin')::group(function(){
     Route::get('/', 'AdminController@index')->name('index');

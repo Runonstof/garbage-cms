@@ -414,7 +414,7 @@ eval("// shim for using process in browser\nvar process = module.exports = {};\n
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("//admin dashboard jsS\r\n\r\n__webpack_require__(/*! ./../forms/form */ \"./resources/js/forms/form.js\");\r\n\r\nwindow.Axios = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\r\n\r\nwindow.Axios.defaults.csrf_token = $('meta[name=csrf_token]').attr('content');\n\n//# sourceURL=webpack:///./resources/js/admin/app.js?");
+eval("//admin dashboard jsS\r\n\r\n__webpack_require__(/*! ./../forms/form */ \"./resources/js/forms/form.js\");\r\n\r\nwindow.Axios = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\r\n\r\nwindow.Axios.defaults.headers.post['X-Csrf-Token'] = $('meta[name=csrf_token]').attr('content');\n\n//# sourceURL=webpack:///./resources/js/admin/app.js?");
 
 /***/ }),
 
@@ -422,11 +422,10 @@ eval("//admin dashboard jsS\r\n\r\n__webpack_require__(/*! ./../forms/form */ \"
 /*!************************************!*\
   !*** ./resources/js/forms/form.js ***!
   \************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n\r\n\r\n$(function(){\r\n    $('form[data-garbage-cms-form]').on('submit', function(ev){\r\n        ev.preventDefault();\r\n\r\n        var formData = {};\r\n\r\n        $(this).find('input[name]').each(function(input){\r\n            formData[$(this).attr('name')] = $(this).val();\r\n        });\r\n\r\n\r\n        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post($(this).attr('action'));\r\n    });\r\n});\r\n\r\n\n\n//# sourceURL=webpack:///./resources/js/forms/form.js?");
+eval("$(function(){\r\n    var isSubmitting = false;\r\n    $('form[data-garbage-cms-form]').on('submit', function(ev){\r\n        ev.preventDefault();\r\n        if(!isSubmitting) {\r\n            isSubmitting = true;\r\n\r\n            Axios.post($(this).attr('action')).then(function(response){\r\n                if(response.data.redirect) {\r\n                    window.location = response.data.redirect;\r\n                }\r\n                if(response.data.message) {\r\n                    alert( response.data.message );\r\n                }\r\n                isSubmitting = false;\r\n            }).catch(function(){\r\n                isSubmitting = false;\r\n            });\r\n        }\r\n    });\r\n});\n\n//# sourceURL=webpack:///./resources/js/forms/form.js?");
 
 /***/ }),
 
