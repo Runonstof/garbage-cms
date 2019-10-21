@@ -25,11 +25,11 @@
                                 <input type="text" name="database" class="form-control" value="garbagecms">
                             </div>
                             @if(session()->has('error.database'))
-                                <small class="form-text text-danger">{{ session()->get('error.database') }}</small>
+                                <small class="form-text text-{{ session()->get('error.database.color','danger') }}">{{ session()->get('error.database') }}</small>
                             @endif
                             <input class="btn btn-primary mt-3" type="submit" name="submit" value="Save">
                             <pre>
-                                {{ session()->json(JSON_PRETTY_PRINT) }}
+                                
                             </pre>
                         </form>
                     </div>

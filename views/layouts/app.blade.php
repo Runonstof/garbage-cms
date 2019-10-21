@@ -8,10 +8,6 @@
         <div id="app{{ isset($class) ? ' '.$class : '' }}">
             @yield('content')
         </div>
-        <script
-			  src="https://code.jquery.com/jquery-3.4.1.min.js"
-			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-			  crossorigin="anonymous"></script>
         <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>
