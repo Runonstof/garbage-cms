@@ -7,13 +7,15 @@
 //Start the session
 if(session_status() == PHP_SESSION_NONE) { session_start(); }
 
+use Tightenco\Collect\Support\Collection;
+
 //Create CSRF token
-if (empty($_SESSION['token'])) {
-    $_SESSION['token'] = bin2hex(random_bytes(32));
+if (empty($_SESSION['_token'])) {
+    $_SESSION['_token'] = bin2hex(random_bytes(32));
 }
 
 function csrf_token() {
-    return $_SESSION['token'];
+    return $_SESSION['_token'];
 }
 
 function csrf_match($token) {
@@ -26,6 +28,26 @@ $GLOBALS['lang'] = require './../lang/'.$_SESSION['locale'].'.php';
 
 require "./../vendor/autoload.php"; //import the composer packages
 require "./../functions.php"; //import our functions
+
+
+//Get POST data from previous request
+//(to keep forms filled when refreshing)
+
+function old($name) {
+    $sessionValue = session()->get('_POST_OLD',[]);
+    $value = null;
+    if(is_array($sessionValue)) {
+        $value = $sessionValue[$name]??null;
+    } elseif(is_object($sessionValue)) {
+        if(property_exists($sessionValue, $name)) {
+            $value = $sessionValue->$name??null;
+        }
+    } else {
+        $value = $sessionValue;
+    }
+
+    return $value;
+}
 
 
 
@@ -89,12 +111,13 @@ require_once './../routes.php';
 
 //Route::handle($URL);
 
+if(!DB::exists()) {
+    if(!getRoute('install.error')->match($URL)) {
+        header('Location: /install/error/database.not_exists');
+        exit;
+    }
+}
+
 //Execute incoming URL
-// if(!DB::exists()) {
-//     route('test');
-    // if(!route('install')->match($URL)) {
-    //     header('Location: '.url().'install');
-    // }
-// }
 Route::handle($URL);
 

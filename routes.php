@@ -16,13 +16,23 @@ I wanted to try to create myself.
 
 Route::get('/', 'HomepageController@index')->name('home');
 Route::get('/test', 'HomepageController@test')->name('test');
-Route::get('/install', 'InstallController@index')->name('install');
+
 Route::get('/testie-route/{argOne}/{argTwo}/{argThree?}', function(){
     return 'hi';
 })->name('testroute');
 
-Route::create([], '/koek', 'InstallController@koek')->name('koek');
 
+//=========================================
+//Routes regarding installation
+Route::get('/install', 'InstallController@index')->name('install');
+Route::all('/install/register', 'InstallController@register')->name('install.register');
+Route::get('/install/error/{error_id?}', 'InstallController@error')->name('install.error');
+
+//=======================
+
+
+
+//URLs for admin panels
 Route::namePrefix('admin.')::urlPrefix('admin')::group(function(){
     Route::get('/', 'AdminController@index')->name('index');
     Route::get('/test','AdminController@test')->name('test');

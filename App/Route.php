@@ -57,6 +57,19 @@ class Route {
     }
 
     /**
+     * Adds a route that accepts all request methods
+     *
+     * @param String $url
+     * @param String|Callable $controllerMethod
+     * @return App\Route
+     */
+    public static function all(String $url, $controllerMethod) {
+        $newRoute = self::create([], $url, $controllerMethod);
+
+        return $newRoute;
+    }
+
+    /**
      * Adds a route that accepts only requests via the GET method
      *
      * @param String $url
@@ -81,7 +94,7 @@ class Route {
     /**
      * Creates fallback route if none is found
      *
-     * @param String $controllerMethod
+     * @param String|Callable $controllerMethod
      * @return App\Route
      */
     public static function fallback($controllerMethod) {
@@ -247,7 +260,6 @@ class Route {
         $url = trim($url,'/');
         $m = [];
         $result = preg_match($this->urlToRegex(),$url, $m);
-        
 
         $names = $this->getUrlArgNames();
         

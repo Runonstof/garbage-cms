@@ -9,12 +9,13 @@ class DB {
     public static function init($callback=null) {
 
         if(self::$db == null) {
-            self::$db = mysqli_connect(
+            self::$db = @mysqli_connect(
                 $_ENV['DB_HOST'],
                 $_ENV['DB_USER'],
-                $_ENV['DB_PASS']
+                $_ENV['DB_PASS'],
+                $_ENV['DB_NAME']
             );
-    
+
             if(\mysqli_connect_errno()) {
                 if(is_null($callback)) {
                     if($_ENV['DEBUG_MODE']) {
@@ -36,10 +37,17 @@ class DB {
         return \mysqli_connect_errno();
     }
 
-    public static function exists($dbname) {
-        return count(DB::select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{dbname}'", [
-            'dbname' => $dbname
-        ])) > 0;
+    public static function dbexists($dbname) {
+        return count(DB::select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMA WHERE SCHEMA_NAME = '$dbname'")) > 0;
+    }
+
+    public static function exists() {
+        $exists = true;
+        self::init(function()use(&$exists){
+            $exists = false;
+        });
+
+        return $exists;
     }
 
 
@@ -55,15 +63,16 @@ class DB {
         return $query;
     }
 
-    public static function select($sql, $values=[]) {
+    public static function select($sql, $values=[],$assoc=true) {
         $query_result = self::query($sql, $values);
 
         $results = [];
-
-        if($query_result->num_rows > 0) {
-            //Loop through results
-            while($row = $query_result->fetch_assoc()) {
-                $results[] = $row; //Push $row in $results array
+        if($query_result) {
+            if($query_result->num_rows > 0) {
+                //Loop through results
+                while($row = $query_result->{'fetch_'.($assoc ? 'assoc' : 'array')}()) {
+                    $results[] = $row; //Push $row in $results array
+                }
             }
         }
 

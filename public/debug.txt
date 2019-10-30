@@ -1,16 +1,19 @@
-Array
-(
-    [database] => da_2$
-)
-
 RGX: /^[\w]+$/
-VAL: da_2$
-MATCH: 0
-Array
-(
-    [database] => garbagecms
-)
-
+VAL: garbagecms
+MATCH: 1
+ISJSON: 1
+ISJSON: 
+KOEK: 1
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+ISJSON: 1
+KOEK: 
+RGX: /^[\w]+$/
+VAL: garbagecms
+MATCH: 1
+ISJSON: 1
+KOEK: 1
 RGX: /^[\w]+$/
 VAL: garbagecms
 MATCH: 1
@@ -32,30 +35,21 @@ MATCH: 1
 RGX: /^[\w]+$/
 VAL: garbagecms
 MATCH: 1
-RGX: /^[\w]+$/
-VAL: garbagecms
-MATCH: 1
-RGX: /^[\w]+$/
-VAL: garbagecms
-MATCH: 1
-RGX: /^[\w]+$/
-VAL: garbagecms
-MATCH: 1
-RGX: /^[\w]+$/
-VAL: garbagecms
-MATCH: 1
-RGX: /^[\w]+$/
-VAL: garbagecms
-MATCH: 1
-RGX: /^[\w]+$/
-VAL: garbagecms
-MATCH: 1
-RGX: /^[\w]+$/
-VAL: garbagecms
-MATCH: 1
-RGX: /^[\w]+$/
-VAL: garbagecms
-MATCH: 1
-RGX: /^[\w]+$/
-VAL: garbagecms
-MATCH: 1
+{
+    "email": {
+        "required": [
+            "email is required"
+        ],
+        "email": [
+            "email must be an email"
+        ]
+    },
+    "password": {
+        "required": [
+            "password is required"
+        ],
+        "min": [
+            "password must be at least 8 characters"
+        ]
+    }
+}

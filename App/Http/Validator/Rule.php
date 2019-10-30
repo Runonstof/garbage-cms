@@ -6,9 +6,9 @@ namespace App\Http\Validator;
 class Rule {
     public static $rules = null;
 
-    public $name;
+    public $name = '';
     public $errorMessage = '';
-    public $ruleMethod;
+    public $ruleMethod = null;
 
     public static function make($name, $ruleMethod=null) {
         return new Rule($name, $ruleMethod);
@@ -38,11 +38,8 @@ class Rule {
                 if(count($args) == 0) {
                     throw new Exception('Rule \'regex\' requires a regular expression!');
                 }
-                debug('RGX: '.$args[0]);
-                debug('VAL: '.$value);
 
                 $match = preg_match($args[0], $value);
-                debug('MATCH: '.print_r($match,true));
                 return $match != 0 && $match !== false;
             });
             new Rule('numeric', function($value){
@@ -51,8 +48,26 @@ class Rule {
             new Rule('datetime', function($value){
                 return strtotime($value) !== false;
             });
+            new Rule('min', function($value,$args){
+                if(count($args) == 0) {
+                    throw new Exception('Rule \'min\' requires a minimum value!');
+                }
+
+                return strlen(strval($value)) >= $args[0];
+            });
+            new Rule('max', function($value,$args){
+                if(count($args) == 0) {
+                    throw new Exception('Rule \'max\' requires a maximum value!');
+                }
+
+                return strlen(strval($value)) <= $args[0];
+            });
+            new Rule('json', function($value){
+                return is_json($value);
+            });
             //rule for readability
             new Rule('nullable', function(){ return true; });
+
         }
     }
     
@@ -64,5 +79,12 @@ class Rule {
         $this->errorMessage = $errorMessage;
 
         self::$rules[$this->name] = $this;
+    }
+
+    public function exec($value,$args=[],$vars=[]) {
+        if(is_callable($this->ruleMethod)) {
+            return call_user_func_array($this->ruleMethod,[$value,$args,$vars]);
+        }
+        return true;
     }
 }

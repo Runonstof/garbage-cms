@@ -14,11 +14,13 @@ class Validator {
         $this->rules = new ParameterBag;
         $this->attributes = new ParameterBag;
         $this->messages = new ParameterBag([
-            'required' => ':attribute is required',
-            'numeric' => ':attribute must be numeric',
-            'regex' => ':attribute must match regex',
-            'email' => ':attrbute must be an email',
-            'datetime' => ':attribute must be in date/datetime format'
+            'required' => '{attribute} is required',
+            'numeric' => '{attribute} must be numeric',
+            'regex' => '{attribute} must match regex',
+            'email' => '{attribute} must be a valid email',
+            'datetime' => '{attribute} must be in date/datetime format',
+            'min' => '{attribute} must be at least {0} characters',
+            'max' => '{attribute} must be at most {0} characters'
         ]);
     }
 
@@ -33,24 +35,46 @@ class Validator {
                 $ruleKey = is_numeric($ruleKey) ? $ruleArgs : $ruleKey;
                 $useRuleArgs = [];
                 if(!is_numeric($ruleKey)) {
-                    $useRuleArgs = is_string($ruleArgs) ? [$ruleArgs] : $ruleArgs;
+                    $useRuleArgs = is_array($ruleArgs) ? $ruleArgs : [$ruleArgs];
                 }
 
                 $validatorRule = Rule::get($ruleKey);
-                if(is_callable($validatorRule->ruleMethod)) {
-                    if(!call_user_func_array($validatorRule->ruleMethod, [$value, $useRuleArgs])) {
-                        $msg = $this->messages->get($ruleKey)??'';
+                if(!$validatorRule->exec($value, $useRuleArgs, $vars)) {
+                    $msg = $this->messages->get($ruleKey)??'';
 
-                        $msg = str_replace(':attribute', $this->attributes->get($valRuleKey,$valRuleKey), $msg);
+                    $msg = str_replace('{attribute}', $this->attributes->get($valRuleKey,$valRuleKey), $msg);
 
-                        $msgs[$valRuleKey][$ruleKey][] = $msg;
-                        $valid = false;
+                    foreach($useRuleArgs as $u=>$useRuleArg) {
+                        $msg = str_replace('{'.$u.'}', $useRuleArg, $msg);
                     }
+
+                    $msgs[$valRuleKey][$ruleKey][] = $msg;
+                    $valid = false;
+                
                 }
 
             }
         }
 
         return $valid;
+    }
+
+    public function validateToSession($vars) {
+        $msgs = [];
+        if(!$this->validate($vars, $msgs)) {
+            foreach($msgs as $inputName=>$inputMsgs) {
+                foreach($inputMsgs as $inputMsg) {
+                    foreach($inputMsg as $msg) {
+                        session()->flash('error.'.$inputName, $msg);
+                        break;
+                    }
+                    break;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }

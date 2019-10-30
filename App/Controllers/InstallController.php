@@ -4,32 +4,49 @@ namespace App\Controllers;
 
 use App\DB;
 use App\Http\Validator\Validator;
-use Symfony\Component\HttpFoundation\Request;
-
 class InstallController {
     public function index() {
         return response()->blade('install.index');
     }
 
-    public function koek() {
-        
+    public function error($vars) {
+        $error_title = null;
+        $error_text = null;
+        switch($vars['error_id']) {
+            case 'database.not_exists':
+                $error_title = __('install.error.database.not_exists.title');
+                $error_text = __('install.error.database.not_exists.text', ['<span class="badge badge-muted">'.$_ENV['DB_NAME'].'</span>']);
+                break;
+        }
+
+        return response()->blade('install.error', compact('error_title', 'error_text'));
+    }
+
+    public function register() {
         $validator = new Validator;
         
         $validator->rules->add([
-            'database'=> [
+            'email' => [
                 'required',
-                'regex' => '/^[\w]+$/'
+                'email'
             ],
+            'password' => [
+                'required',
+                'min' => 8,
+                'max' => 20
+            ]
         ]);
         
-        if(!$validator->validate($_POST, $msgs)) {
-            return response()->json($msgs);
+        if(!$validator->validateToSession($_POST)) {
+            return response()->json([
+                'success' => false,
+                'redirect' => route('install')
+            ]);
         }
-        DB::query('SELECT * FROM Users');
+        
         return response()->json([
             'success' => true,
-            'message' => 'Database created!',
-            'type' => 'success'
+            'redirect' => route('install')
         ]);
     }
 }

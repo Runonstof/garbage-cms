@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Tightenco\Collect\Support\Collection;
 
 //Garbage CMS response using Symfonys response class
 class Response extends SymfonyResponse {
@@ -23,5 +24,12 @@ class Response extends SymfonyResponse {
         $this->setContent(json_encode($json));
 
         return $this;
+    }
+
+    public function send() {
+        if(count($_POST) > 0) {
+            session()->flash('_POST_OLD', collect($_POST)->except(['password','_token','_method'])->toArray());
+        }
+        return parent::send();
     }
 }

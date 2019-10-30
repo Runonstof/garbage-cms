@@ -16,7 +16,7 @@ if(!function_exists('blade')) {
     function blade($blade, $data=[]) {
         $blades = new Blade('./../views', './../cache');
 
-        return $blades->make($blade, $data);
+        return $blades->make($blade)->with($data);
     }
 }
 
@@ -72,8 +72,13 @@ if(!function_exists('__')) {
      */
     function __($translation_name, $data=[]) {
         $string = $GLOBALS['lang']['strings'][$translation_name]??'Translation not found.';
+
+        if(is_array($string)) {
+            $string = implode('<br>',$string);
+        }
+
         foreach($data as $key=>$value) {
-            $string = str_replace("{$key}", $value, $string);
+            $string = str_replace('{'.strval($key).'}', $value, $string);
         }
         return $string;
     }
@@ -82,6 +87,13 @@ if(!function_exists('__')) {
 if(!function_exists('session')) {
     function session() {
         return new Session;
+    }
+}
+
+if(!function_exists('is_json')) {
+    function is_json($string) {
+        json_decode($string);
+        return json_last_error() == JSON_ERROR_NONE;
     }
 }
 

@@ -80,7 +80,9 @@ class Session {
 
     public function flush() {
         if(!is_null(self::$vars)) {
-            self::$vars = [];
+            $_SESSION['vars'] = [];
+            self::$init = false;
+            $this->init();
         }
     }
 
