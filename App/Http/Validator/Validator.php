@@ -5,6 +5,9 @@ namespace App\Http\Validator;
 use App\Http\Validator\Rule;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+/**
+ * Class to validate data for incoming requests inside Garbage CMS
+ */
 class Validator {
     public $rules;
     public $attributes;
@@ -20,11 +23,12 @@ class Validator {
             'email' => '{attribute} must be a valid email',
             'datetime' => '{attribute} must be in date/datetime format',
             'min' => '{attribute} must be at least {0} characters',
-            'max' => '{attribute} must be at most {0} characters'
+            'max' => '{attribute} must be at most {0} characters',
+
         ]);
     }
 
-    public function validate($vars, &$msgs=[]) {
+    public function validate($vars, &$msgs=[], &$validated=[]) {
         $valid = true;
         foreach($this->rules as $valRuleKey=>$valRule) {
             $value = $vars[$valRuleKey] ?? null;
@@ -48,9 +52,13 @@ class Validator {
                         $msg = str_replace('{'.$u.'}', $useRuleArg, $msg);
                     }
 
+                    
+
                     $msgs[$valRuleKey][$ruleKey][] = $msg;
                     $valid = false;
                 
+                } else {
+                    $validated[$valRuleKey] = $value;
                 }
 
             }
@@ -76,5 +84,11 @@ class Validator {
         }
 
         return true;
+    }
+
+    public function validated($vars) {
+        $this->validate($vars, $msgs, $validated);
+
+        return $validated;
     }
 }

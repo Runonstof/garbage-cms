@@ -1,9 +1,11 @@
 <?php
-use Jenssegers\Blade\Blade;
+
 use App\Route;
 use App\Session;
-use Dotenv\Exception\ValidationException;
 use App\Http\Response;
+use App\CommandLine\Output;
+use Jenssegers\Blade\Blade;
+use Dotenv\Exception\ValidationException;
 
 
 if(!function_exists('response')) {
@@ -33,7 +35,7 @@ if(!function_exists('getRoute')) {
 
 if(!function_exists('route')) {
     /**
-     * Undocumented function
+     * Returns route url with filled arguments
      *
      * @param [type] $name
      * @param array $vars
@@ -89,6 +91,12 @@ if(!function_exists('session')) {
         return new Session;
     }
 }
+
+if(!function_exists('output')) {
+    function output() {
+        return new Output;
+    }
+} 
 
 if(!function_exists('is_json')) {
     function is_json($string) {

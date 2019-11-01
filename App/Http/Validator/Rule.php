@@ -17,7 +17,7 @@ class Rule {
     public static function get($name) {
         self::init();
         
-        if(!array_key_exists($name, self::$rules)) {
+        if(!array_key_exists($name, self::$rules??[])) {
             throw new Exception('Rule \''.$name.'\' doesn\'t exist!');
         }
 
@@ -27,6 +27,13 @@ class Rule {
     public static function init() {
         if(is_null(self::$rules)) {
             self::$rules = [];
+
+            //=====================================
+            // Register default rules to validator
+            // Feel free to add/edit
+            // 
+            // - Runonstof
+            //=====================================
 
             new Rule('required', function($value,$args){
                 return !is_null($value) && !empty($value);
@@ -65,9 +72,16 @@ class Rule {
             new Rule('json', function($value){
                 return is_json($value);
             });
-            //rule for readability
+            new Rule('contains', function($value, $args){
+                foreach($args as $arg) {
+                    if(strpos($value, $arg) !== false) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            
             new Rule('nullable', function(){ return true; });
-
         }
     }
     

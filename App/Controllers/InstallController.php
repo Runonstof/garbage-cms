@@ -33,7 +33,8 @@ class InstallController {
             'password' => [
                 'required',
                 'min' => 8,
-                'max' => 20
+                'max' => 20,
+                
             ]
         ]);
         

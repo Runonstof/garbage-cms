@@ -4,5 +4,10 @@
         "tightenco/collect": "^6.2",
         "jenssegers/blade": "^1.2",
         "symfony/http-foundation": "^4.3"
+    },
+    "autoload": {
+        "classmap": [
+            "App\\"
+        ]
     }
 }

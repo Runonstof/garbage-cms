@@ -4,6 +4,7 @@
 // I wrote this while bein high af so go easy
 //=====================================================
 
+
 //Start the session
 if(session_status() == PHP_SESSION_NONE) { session_start(); }
 
@@ -110,10 +111,11 @@ require_once './../routes.php';
 //var_dump(collect(Route::$routes)->firstWhere('name','install'));
 
 //Route::handle($URL);
-
+DB::init();
 if(!DB::exists()) {
     if(!getRoute('install.error')->match($URL)) {
-        header('Location: /install/error/database.not_exists');
+        //header('Location: /install/error/database.not_exists');
+        
         exit;
     }
 }

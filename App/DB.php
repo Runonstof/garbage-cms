@@ -37,10 +37,18 @@ class DB {
         return \mysqli_connect_errno();
     }
 
-    public static function dbexists($dbname) {
-        return count(DB::select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMA WHERE SCHEMA_NAME = '$dbname'")) > 0;
+    public static function databases() {
+        return self::select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMA");
     }
 
+    public static function tables($dbname) {
+        return self::select("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='{dbname}'", compact('dbname'));
+    }
+    
+    public static function dbexists($dbname) {
+        return in_array($dbname, self::databases()->toArray());
+    }
+    
     public static function exists() {
         $exists = true;
         self::init(function()use(&$exists){
@@ -55,7 +63,7 @@ class DB {
         self::init();
 
         foreach($values as $key=>$value) { //Escape all arguments in the SQL
-            $sql = str_replace(':'.$key, \mysqli_real_escape_string($value));
+            $sql = str_replace(':'.$key, \mysqli_real_escape_string($value, self::$db), $sql);
         }
 
         $query = self::$db->query($sql);
@@ -76,6 +84,6 @@ class DB {
             }
         }
 
-        return $results;
+        return collect($results);
     }
 }
