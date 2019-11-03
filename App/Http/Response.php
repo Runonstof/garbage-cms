@@ -26,6 +26,12 @@ class Response extends SymfonyResponse {
         return $this;
     }
 
+    public function redirect($url) {
+        $this->headers->set('location', $url);
+
+        return $this;
+    }
+
     public function send() {
         if(count($_POST) > 0) {
             session()->flash('_POST_OLD', collect($_POST)->except(['password','_token','_method'])->toArray());
