@@ -9,6 +9,7 @@
 if(session_status() == PHP_SESSION_NONE) { session_start(); }
 
 use Tightenco\Collect\Support\Collection;
+//
 
 //Create CSRF token
 if (empty($_SESSION['_token'])) {
@@ -27,8 +28,8 @@ $_SESSION['locale'] = $_SESSION['locale']??'en';
 
 $GLOBALS['lang'] = require './../lang/'.$_SESSION['locale'].'.php';
 
-require "./../vendor/autoload.php"; //import the composer packages
-require "./../functions.php"; //import our functions
+require __DIR__."./../vendor/autoload.php"; //import the composer packages
+require __DIR__."./../functions.php"; //import our functions
 
 
 //Get POST data from previous request
@@ -60,8 +61,7 @@ function old($name) {
 // frameworks and they used dotenv as well, nothing too savy)
 // We use the composer package 'vlucas/dotenv' for this
 //=====================================================
-
-$dotenv = Dotenv\Dotenv::create(__DIR__.'\..');
+$dotenv = Dotenv\Dotenv::create(__DIR__.'/..');
 $dotenv->load();
 
 //=====================================================
@@ -77,7 +77,7 @@ $dotenv->load();
 
 use App\DB;
 use Jenssegers\Blade\Blade;
-$blades = new Blade('views', 'cache');
+$blades = new Blade(__DIR__.'/views', __DIR__.'/cache');
 
 
 //=====================================================
@@ -86,10 +86,7 @@ $blades = new Blade('views', 'cache');
 //=====================================================
 
 
-
-require_files('./../App/');
-
-
+require './../App/helpers.php';
 
 use App\Route;
 
