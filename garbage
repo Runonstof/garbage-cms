@@ -29,6 +29,8 @@ $dotenv->load();
 
 require_files('App\\');
 
+require './routes.php';
+
 use App\CommandLine\Command;
 use App\DB;
 use App\CommandLine\Output;
@@ -36,14 +38,7 @@ use Jenssegers\Blade\Blade;
 $blades = new Blade('views', 'cache');
 $output = new Output;
 
-
-$command = new Command;
-$command->name = "Test Command";
-$command->description = "This is a test command.";
-$command->command = "test {argon} {argtw} {argTree?}";
-
-$vars = [];
-
+Command::registerDefaultCommands();
 
 shell_start:
 echo 
@@ -62,8 +57,19 @@ try {
     if($cmd != '') {
         readline_add_history($cmd); //Adds last command to history so you can use up-arrow-key to navigate to history
 
-        $commandOutput = eval('return '.$cmd.';');
-        var_dump($commandOutput);
+        $matched = false;
+        foreach(Command::all() as $command) {
+            if($command->match($cmd, $vars)) {
+                $matched = true;
+                $command->execute($vars);
+                break;
+            }
+        }
+
+        if(!$matched) {
+            $commandOutput = eval('return '.$cmd.';');
+            var_dump($commandOutput);
+        }
     }
 } catch(Exception $exc) {
     var_dump($exc);
