@@ -37,9 +37,8 @@
                                 <small class="form-text text-{{ session()->get('error.password.color','danger') }}">{!! session()->get('error.password') !!}</small>
                             @endif
                             
+
                             <input class="btn btn-primary mt-3" type="submit" name="submit" value="Save">
-                            <pre>
-                            </pre>
                         </form>
                     </div>
                 </div>

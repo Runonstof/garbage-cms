@@ -4,9 +4,13 @@ namespace App\Controllers;
 
 use App\DB;
 use App\Http\Validator\Validator;
+use App\Http\Response;
+
+
 class InstallController {
     public function index() {
-        return response()->blade('install.index');
+        //TODO: check - database - tables - user acc
+        return response()->blade('install.account');
     }
 
     public function error($vars) {
@@ -19,7 +23,7 @@ class InstallController {
                 break;
         }
 
-        return response()->blade('install.error', compact('error_title', 'error_text'));
+        return \response()->blade('install.error', compact('error_title', 'error_text'));
     }
 
     public function register() {
@@ -39,15 +43,17 @@ class InstallController {
         ]);
         
         if(!$validator->validateToSession($_POST)) {
-            return response()->json([
+            return \response()->json([
                 'success' => false,
                 'redirect' => route('install')
             ]);
         }
         
-        return response()->json([
+        return \response()->json([
             'success' => true,
             'redirect' => route('install')
         ]);
     }
+
+    
 }
