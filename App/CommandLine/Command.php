@@ -2,26 +2,71 @@
 
 namespace App\CommandLine;
 
+use App\CommandLine\Output;
+
 /**
  * A Garbage CMS Command
  */
 class Command {
-    public static $commands = [];
-    public static $attr_rgx = '/{(\w+)}/'; //Regex to match argument definitions in the command
-    public static $optional_attr_rgx = '/(?:\/)?{(\w+)\?}/'; //Regex to match optional argument definitions in the command
+    private static $commands = [];
+    private static $attr_rgx = '/{(\w+)}/'; //Regex to match argument definitions in the command
+    private static $optional_attr_rgx = '/(?:\/)?{(\w+)\?}/'; //Regex to match optional argument definitions in the command
 
     public $name = '';
     public $description = '';
     public $command = null;
+    public $run = null;
 
-    public function __construct() {
-        
+    /**
+     * Make a new Command object that gets registered immediatly
+     *
+     * @param string $name Name of the command.
+     * @param string $description Description of the command.
+     * @param string $command The command usage notation.
+     * @param Callable $runFunction The function to execute when command is called
+     * @return void
+     */
+    public static function create($name, $description, $command, $runFunction=null) {
+        $cmd = new self;
+        $cmd->name = $name;
+        $cmd->description = $description;
+        $cmd->command = $command;
+
+        $cmd->run = $runFunction??function($self){
+            $output = new Output;
+            echo $output->getColoredString("Command '".$self->name."' has no run function!\n", "white", "red");
+        };
+
+        return $cmd->register();
     }
 
+    /**
+     * Register command to global command list
+     *
+     * @return Command
+     */
     public function register() {
         self::$commands[$this->name] = $this;
+
+        return $this;
+    }
+    
+    public function execute($vars=[]) {
+        if(is_callable($this->run)) {
+            return call_user_func_array($this->run, [$this, $vars]);
+        }
+
+        return null;
     }
 
+    /**
+     * Returns all commands in the global list
+     *
+     * @return Collection
+     */
+    public static function all() {
+        return collect(self::$commands);
+    }
 
     /**
      * Returns if the given string matches the command, $vars is for getting the arguments.
@@ -42,20 +87,18 @@ class Command {
             if(is_string($vars[$name])) {
                 $vars[$name] = trim($vars[$name], " \t\n\r\0\x0B\"'"); //transform ""a string   "" to "a string"
             }
+            if(is_float($vars[$name])) {
+                $vars[$name] = floatval($vars[$name]);
+            }
+            if(is_int($vars[$name])) {
+                $vars[$name] = intval($vars[$name]);
+            }
         }
 
         
         return $result != 0 && $result !== false;
     }
 
-    /**
-     * Run command filler
-     *
-     * @return mixed
-     */
-    public function run() {
-        echo output()->getColoredString("ERROR: This command has no method\n", 'white', 'red');
-    }
 
     /**
      * Returns the regular expression of the garbage command to match a string on
@@ -102,5 +145,42 @@ class Command {
      */
     public function getArgNames() {
         return $this->getArgs()->keys();
+    }
+
+    public static function registerDefaultCommands() {
+
+        //Register help command (command-inception hehe)
+        self::create('Help', 'Shows this screen', 'help {page?}', function($cmd, $args){
+
+            $page = $args['page']??0;
+
+            $output = new Output;
+            echo $output->getColoredString("garbage-cms help - page #".($page+1)."\n", "black", "light_gray");
+            
+            foreach(Command::all()->sortBy('command')->slice($page*10)->take(10) as $command) {
+                echo 
+                    $output->getColoredString("->", "black", "light_gray")." ".
+                    $output->getColoredString($command->command, "yellow")." - ".
+                    $output->getColoredString($command->name, "cyan")." - ".
+                    $output->getColoredString($command->description, "green").
+                    " \n";
+            }
+        });
+
+        self::create('Generate Application Key', 'Generates a new unique application key used for security measures', 'generate-key', function($command){
+            $output = new Output;
+
+            setenv([
+                'APP_KEY' => genToken(64)
+            ]);
+
+            echo $output->getColoredString("New application key generated\n\n", "green");
+        });
+
+        self::create('Clearscreen', 'Clears the output screen', 'cls', function(){
+            $output = new Output;
+            $output->clear();
+        });
+
     }
 }
