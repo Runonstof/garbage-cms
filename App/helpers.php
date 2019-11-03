@@ -108,3 +108,17 @@ if(!function_exists('is_json')) {
 function debug(...$txt) {
     file_put_contents('debug.txt', file_get_contents('debug.txt').implode("\n",$txt)."\n");
 }
+
+function genToken($length){
+    $token = "";
+    $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+    $codeAlphabet.= "0123456789";
+    $max = strlen($codeAlphabet); // edited
+
+   for ($i=0; $i < $length; $i++) {
+       $token .= $codeAlphabet[random_int(0, $max-1)];
+   }
+
+   return $token;
+}
