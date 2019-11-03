@@ -4,8 +4,8 @@ CREATE TABLE users (
     password varchar(255) NOT NULL,
     password_salt var(255) NOT NULL,
     role_id int NOT NULL DEFAULT 0,
-    created datetime NOT NULL,
-    updated datetime NOT NULL,
+    created_at timestamp NOT NULL,
+    updated_at timestamp NOT NULL,
     
     PRIMARY KEY (id)
 );

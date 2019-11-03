@@ -3,8 +3,8 @@ CREATE TABLE models (
     type varchar(255) NOT NULL,
     name varchar(255) NOT NULL,
     position INT,
-    created datetime NOT NULL,
-    updated datetime NOT NULL,
+    created_at timestamp NOT NULL,
+    updated_at timestamp NOT NULL,
 
 
     PRIMARY KEY(id)

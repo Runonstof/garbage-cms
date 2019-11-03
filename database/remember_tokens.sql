@@ -3,8 +3,8 @@ CREATE TABLE remember_tokens (
     token varchar(255) NOT NULL UNIQUE,
     user_id int NOT NULL,
     expires int NOT NULL,
-    created datetime NOT NULL,
-    updated datetime NOT NULL,
+    created_at timestamp NOT NULL,
+    updated_at timestamp NOT NULL,
 
     PRIMARY KEY(id)
 )
