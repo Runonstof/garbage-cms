@@ -1,4 +1,4 @@
-CREATE TABLE model_meta (
+CREATE TABLE IF NOT EXISTS model_meta (
     id int NOT NULL AUTO_INCREMENT,
     model_id int NOT NULL,
     key VARCHAR(255) NOT NULL,

@@ -1,4 +1,4 @@
-CREATE TABLE password_resets (
+CREATE TABLE IF NOT EXISTS remember_tokens (
     id int NOT NULL AUTO_INCREMENT,
     token varchar(255) NOT NULL UNIQUE,
     user_id int NOT NULL,
