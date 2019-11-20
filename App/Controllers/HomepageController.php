@@ -9,4 +9,12 @@ class HomepageController {
     public function test() {
         return blade('test')->render();
     }
+
+    public function doggo(){
+        return blade('doggo-theme/index')->render();
+    }
+
+    public function article(){
+        return blade('doggo-theme/pages')->render();
+    }
 }
