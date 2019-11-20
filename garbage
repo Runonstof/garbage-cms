@@ -34,11 +34,14 @@ require './routes.php';
 use App\CommandLine\Command;
 use App\DB;
 use App\CommandLine\Output;
+use App\User;
 use Jenssegers\Blade\Blade;
 $blades = new Blade('views', 'cache');
 $output = new Output;
 
 Command::registerDefaultCommands();
+
+$user = new User;
 
 shell_start:
 echo 
