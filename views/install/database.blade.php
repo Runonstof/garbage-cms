@@ -15,7 +15,12 @@
                     <div class="card-body">
                         {!! __('install.text') !!}
                         <br>
-                        
+                        {!! __('install.text.database') !!}
+                        <div class="text-center">
+                            <form action="{{ route('install.database') }}" data-garbage-cms-form>
+                            <input type="submit" class="btn btn-primary mt-3" name="install" value="{{ __('install.text.database.submit') }}">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
