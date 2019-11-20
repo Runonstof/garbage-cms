@@ -30,25 +30,23 @@
 
         </nav>
 
-    
-    
-
-        <!-- Article Header -->
+        <!-- News Title -->
         <p class="display-4 text-weight-light my-4 ">
-        Garbage CMS Official Release !!!
+        Garbage CMS Official Release !!! [News Title Here]
         </p>
 
-        <!-- Article Author And Published Date -->
+        <!-- News Author And Published Date -->
         <h6 class="lead mb-5">
-        <strong>Author</strong> • Published on 01/01/2019
+        <strong>Author</strong> • Published on 01/01/2019 [News Date Here]
         </h6>
 
-        <!-- Article Image -->
-        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80 class="img-fluid" alt="Article Image" style="width:100%;">
+        <!-- News Image -->
+        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80 class="img-fluid" alt="News Image" style="width:100%;">
 
-        <!-- Article Content -->
+        <!-- News Content -->
         <div class="card border-top-0 border-left-0 border-right-0 rounded-0 mt-5">
             <div class="card-body ">
+                <strong>[News Content Here]</strong>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam et voluptates est ea ab aut voluptas, quasi natus repellat maiores
                 consequuntur cupiditate delectus dolor odio explicabo soluta. Vero officiis illo perspiciatis est veritatis, minima cupiditate
                 pariatur rem architecto error eaque alias quos a, cumque id nobis nisi! Provident, dolorum modi. Numquam consequuntur amet dolor 
