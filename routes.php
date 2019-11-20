@@ -25,8 +25,12 @@ Route::get('/testie-route/{argOne}/{argTwo}/{argThree?}', function(){
 //=========================================
 //Routes regarding installation
 Route::get('/install', 'InstallController@index')->name('install');
-Route::all('/install/register', 'InstallController@register')->name('install.register');
 Route::get('/install/error/{error_id?}', 'InstallController@error')->name('install.error');
+
+//Route where installation begins
+Route::post('/install/database', 'InstallController@database')->name('install.database'); //DB Structure
+Route::post('/install/register', 'InstallController@register')->name('install.register'); //where admin register acc data gets sends to, to handle and db seed
+
 
 //=======================
 
