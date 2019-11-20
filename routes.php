@@ -16,7 +16,8 @@ I wanted to try to create myself.
 
 Route::get('/', 'HomepageController@index')->name('home');
 Route::get('/test', 'HomepageController@test')->name('test');
-
+Route::get('/doggo','HomepageController@doggo')->name('doggo');
+Route::get('/doggo/article','HomepageController@article')->name('article');
 Route::get('/testie-route/{argOne}/{argTwo}/{argThree?}', function(){
     return 'hi';
 })->name('testroute');
