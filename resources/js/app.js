@@ -5,3 +5,5 @@
 require('jquery');
 require('bootstrap-notify');
 require('axios');
+
+require('./themes/randomdev-theme');

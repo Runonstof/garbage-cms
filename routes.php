@@ -22,6 +22,8 @@ Route::get('/testie-route/{argOne}/{argTwo}/{argThree?}', function(){
     return 'hi';
 })->name('testroute');
 
+Route::get('/randomdev', 'HomepageController@randomdev')->name('randomdev');
+
 
 //=========================================
 //Routes regarding installation

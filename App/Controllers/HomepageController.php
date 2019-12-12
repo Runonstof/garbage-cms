@@ -17,4 +17,8 @@ class HomepageController {
     public function article(){
         return blade('doggo-theme/pages')->render();
     }
+
+    public function randomdev() {
+        return response()->blade('themes.randomdev-theme.list');
+    }
 }

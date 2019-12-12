@@ -436,7 +436,19 @@ eval("// shim for using process in browser\nvar process = module.exports = {};\n
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("//=========================\r\n//Import from here new scripts/modules for Garbage CMS\r\n//This is where all the JS starts\r\n//=========================\r\n__webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\");\r\n__webpack_require__(/*! bootstrap-notify */ \"./node_modules/bootstrap-notify/bootstrap-notify.js\");\r\n__webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n\n//# sourceURL=webpack:///./resources/js/app.js?");
+eval("//=========================\r\n//Import from here new scripts/modules for Garbage CMS\r\n//This is where all the JS starts\r\n//=========================\r\n__webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\");\r\n__webpack_require__(/*! bootstrap-notify */ \"./node_modules/bootstrap-notify/bootstrap-notify.js\");\r\n__webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\r\n\r\n__webpack_require__(/*! ./themes/randomdev-theme */ \"./resources/js/themes/randomdev-theme.js\");\n\n//# sourceURL=webpack:///./resources/js/app.js?");
+
+/***/ }),
+
+/***/ "./resources/js/themes/randomdev-theme.js":
+/*!************************************************!*\
+  !*** ./resources/js/themes/randomdev-theme.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n//# sourceURL=webpack:///./resources/js/themes/randomdev-theme.js?");
 
 /***/ }),
 
