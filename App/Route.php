@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Support\Collection;
 use App\Http\Response;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
  * Route class for handling with a single route
  */
 class Route {
-    public static $routes = [];
+    public static $routes = null;
     public static $namePrefix = [];
     public static $urlPrefix = [];
 
@@ -21,6 +22,7 @@ class Route {
     private $methods = [];
     public $name = '';
     private $controllerAction = '';
+    public $vars;
     private $middleware = [];
     public static $attr_rgx = '/{(\w+)}/'; //Regex to match argument definitions in url
     public static $optional_attr_rgx = '/(?:\/)?{(\w+)\?}/'; //Regex to match optional argument definitions in url
@@ -32,12 +34,15 @@ class Route {
      * @param String $url
      * @param String|Callable $controllerAction
      */
-    public function __construct($methods, $url, $controllerAction) {
-        $this->url = trim(implode('',self::$urlPrefix).$url,'/');
+    public function __construct($methods, $url, $controllerAction, $vars=[]) {
+        if(is_null(self::$routes)) {
+            self::$routes = new Collection;
+        }
+
+        $this->url = trim(implode('/',self::$urlPrefix).$url,'/');
         $this->methods = $methods;
         $this->controllerAction = $controllerAction;
-
-        self::$routes[] = $this;
+        $this->vars = new ParameterBag($vars);
     }
 
     /**
@@ -115,7 +120,9 @@ class Route {
                 $found=true;
                 if(in_array($_SERVER['REQUEST_METHOD'], $route->methods) || $route->methods == []) {
                     //$request = Request::createFromGlobals();
-
+                    // dd(input_json(), $vars);
+                    $vars = array_merge(input_json(), $vars)??[];
+                
                     $response = $route->exec($vars);
                     if($response instanceof SymfonyResponse) {
                         //if the response returned by controller is a response object
@@ -194,7 +201,7 @@ class Route {
      * @return App\Route
      */
     public function url($url) {
-        $this->url = trim(implode('',self::$urlPrefix).$url, '/');
+        $this->url = trim(implode('/',self::$urlPrefix).$url, '/');
         return $this;
     }
 
@@ -279,6 +286,10 @@ class Route {
      */
     public function exec($args=[]) {
 
+
+        $args = array_merge($this->vars->all(), $args);
+
+
         $action = null;
         if(is_string($this->controllerAction)) {
             $caSplitted = explode('@', $this->controllerAction);
@@ -294,6 +305,10 @@ class Route {
         } elseif(is_callable($this->controllerAction)) {
             $action = $this->controllerAction;
         }
+
+        
+        $args = array_merge(input_json(), $args);
+        
 
         return \call_user_func_array($action, [$args, Request::createFromGlobals()])??'';
     }
@@ -329,4 +344,11 @@ class Route {
 
         return null;
     }
+
+    public function with($vars) {
+        $this->vars->add($vars);
+
+        return $this;
+    }
+
 }

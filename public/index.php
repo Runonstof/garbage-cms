@@ -11,6 +11,27 @@ if(session_status() == PHP_SESSION_NONE) { session_start(); }
 use Tightenco\Collect\Support\Collection;
 //
 
+Collection::macro('recursive', function () {
+    return $this->map(function ($value) {
+        if (is_array($value) || is_object($value)) {
+            return collect($value)->recursive();
+        }
+
+        return $value;
+    });
+});
+
+Collection::macro('mapRecursive', function($callback){
+    
+    return $this->map(function($value) use($callback){
+        if(is_array($value) || is_object($value)) {
+            return collect($value)->mapRecursive($callback);
+        }
+
+        return $callback($value);
+    });
+});
+
 //Create CSRF token
 if (empty($_SESSION['_token'])) {
     $_SESSION['_token'] = bin2hex(random_bytes(32));

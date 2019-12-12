@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Tightenco\Collect\Support\Collection;
 
@@ -20,10 +21,7 @@ class Response extends SymfonyResponse {
     }
     
     public function json($json) {
-        $this->headers->set('content-type', 'application/json');
-        $this->setContent(json_encode($json));
-
-        return $this;
+        return JsonResponse::create($json, 200, ['content-type' => 'application/json'], true);
     }
 
     public function redirect($url) {

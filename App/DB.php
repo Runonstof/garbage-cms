@@ -68,10 +68,7 @@ class DB {
      * @return Collection
      */
     public static function tables($dbname=null) {
-        
-        return self::select("SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema=:dbname;",[
-            'dbname' => is_null($dbname) ? $_ENV['DB_NAME'] : $dbname
-        ]);
+        return  collect(self::query()->select('table_name')->table('information_schema.tables')->where('table_schema', 'garbagecms')->get())->pluck('TABLE_NAME');
     }
     
     /**
@@ -94,62 +91,23 @@ class DB {
         return $exists;
     }
 
-    /**
-     * Query the database, returns an already executed prepared statement
-     *
-     * @param string $sql
-     * @param array $values
-     * @return PDOStatement
-     */
-    public static function query($sql, $values=[]) {
+    public static function query() {
         self::init();
 
-        $statement = self::$db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $connection = self::$db;
+
+        $q = new \ClanCats\Hydrahon\Builder($_ENV['DB_TYPE'], function($query, $queryString, $queryParameters) use($connection)
+        {
+            $statement = $connection->prepare($queryString);
+            $statement->execute($queryParameters);
         
-        foreach($values as $key=>$value) {
-            $statement->bindParam(':'.$key,$value);
-        }
-
-        try {
-            $statement->execute();
-        } catch (PDOException $e) {
-            if($_ENV['DEBUG_MODE']) {
-                die('PDO ERROR: '.$e->getMessage()."<br><br>".print_r($statement,true));
-            } else {
-                die('PDO ERROR');
+            // when the query is fetchable return all results and let hydrahon do the rest
+            if ($query instanceof \ClanCats\Hydrahon\Query\Sql\FetchableInterface)
+            {
+                return $statement->fetchAll(\PDO::FETCH_ASSOC);
             }
-        }
+        });
 
-        return $statement;
-    }
-
-    /**
-     * Queries the database and fetches the data
-     *
-     * @param string $sql
-     * @param array $values
-     * @param boolean $assoc
-     * @return Collection
-     */
-    public static function select($sql, $values=[],$assoc=true) {
-        $statement = self::query($sql, $values);
-        
-        $queryResults = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        if(!$assoc) {
-            $objs = [];
-            
-            foreach($queryResults as $row) {
-                $obj = new stdClass;
-                foreach($row as $key=>$value) {
-                    $obj->{$key} = $value;
-                }
-                $objs[] = $obj;
-            }
-
-            return collect($objs);
-        }
-
-        return collect($queryResults);
+        return $q;
     }
 }

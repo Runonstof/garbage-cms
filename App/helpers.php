@@ -26,10 +26,16 @@ if(!function_exists('getRoute')) {
     function getRoute($name) {
         $route = collect(Route::$routes)->firstWhere('name', $name); 
         if(is_null($route)) {
-            throw new ValidationException("Route '$name' does not exists!");
+            throw new Exception("Route '$name' does not exists!");
         }
 
         return $route;
+    }
+}
+
+if(!function_exists('config')) {
+    function config($name) {
+        return require './../config/'.$name.'.php';
     }
 }
 
@@ -48,7 +54,7 @@ if(!function_exists('route')) {
 
 if(!function_exists('mix')) {
     function mix($file) {
-        return url().'/public/'.$file.'?v='.uniqid();
+        return url().'/'.$file.'?v='.uniqid();
     }
 }
 
@@ -63,6 +69,18 @@ if(!function_exists('url')) {
       }
       
 }
+
+if(!function_exists('input_json')) {
+    function input_json() {
+        $input = file_get_contents('php://input');
+        if(is_json($input)) {
+            return json_decode($input,true);
+        }
+
+        return [];
+    }
+}
+
 
 //this is translation function
 if(!function_exists('__')) {
@@ -121,4 +139,20 @@ function genToken($length){
    }
 
    return $token;
+}
+function getRealIpAddr()
+{
+    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+    {
+      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+    {
+      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else
+    {
+      $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
 }
