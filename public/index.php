@@ -8,6 +8,29 @@
 //Start the session
 if(session_status() == PHP_SESSION_NONE) { session_start(); }
 
+
+
+//Create CSRF token
+if (empty($_SESSION['_token'])) {
+    $_SESSION['_token'] = bin2hex(random_bytes(32));
+}
+
+function csrf_token() {
+    return $_SESSION['_token'];
+}
+
+function csrf_match($token) {
+    return hash_equals(csrf_token(), $token);
+}
+
+$_SESSION['locale'] = $_SESSION['locale']??'en';
+
+$GLOBALS['lang'] = require './../lang/'.$_SESSION['locale'].'.php';
+
+require __DIR__."./../vendor/autoload.php"; //import the composer packages
+require __DIR__."./../functions.php"; //import our functions
+
+
 use Tightenco\Collect\Support\Collection;
 //
 
@@ -31,27 +54,6 @@ Collection::macro('mapRecursive', function($callback){
         return $callback($value);
     });
 });
-
-//Create CSRF token
-if (empty($_SESSION['_token'])) {
-    $_SESSION['_token'] = bin2hex(random_bytes(32));
-}
-
-function csrf_token() {
-    return $_SESSION['_token'];
-}
-
-function csrf_match($token) {
-    return hash_equals(csrf_token(), $token);
-}
-
-$_SESSION['locale'] = $_SESSION['locale']??'en';
-
-$GLOBALS['lang'] = require './../lang/'.$_SESSION['locale'].'.php';
-
-require __DIR__."./../vendor/autoload.php"; //import the composer packages
-require __DIR__."./../functions.php"; //import our functions
-
 
 //Get POST data from previous request
 //(to keep forms filled when refreshing)
